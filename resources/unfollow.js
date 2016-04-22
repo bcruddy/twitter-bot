@@ -9,7 +9,7 @@ class Unfollow {
   }
 
   /**
-   * get list of people I follow,
+   * get a filtered list of people I follow,
    * filter by:
    *  NOT verified, less than 3000 followers
    *
@@ -20,14 +20,13 @@ class Unfollow {
       if (err)
         return callback(err);
 
-      let friendIdList = data.users.filter(u => !u.verified || u.followers_count < this.config.min_follower_count).map(u => u.id).reverse().join(', ');
+      let friendIdList = data.users.filter(u => !u.verified && u.followers_count < this.config.min_follower_count && !this.config.whitelist.contains(u.screen_name)).map(u => u.id).reverse().join(', ');
       callback(null, friendIdList);
     });
   }
 
   /**
-   * Look up relationships by userId
-   * select a user that I follow that does not follow me
+   * Select a user that I follow that does not follow me
    *
    * @param friendIdList {string}
    * @param callback {Function}
@@ -45,12 +44,6 @@ class Unfollow {
 
   }
 
-  /**
-   * Unfollow a twitter user
-   *
-   * @param user {object} - a user object from Twitter
-   * @param callback {Function}
-   */
   unfollowUser (user, callback) {
     let opt = { screen_name: user.screen_name };
     this.bot.post('friendships/destroy', opt, (err, data) => {

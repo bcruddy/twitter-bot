@@ -11,5 +11,6 @@
     "unfollow": 1,
     "favorite": 1
   },
-  "min_follower_count": 3000
+  "min_follower_count": 3000,
+  "whitelist": []
 }
