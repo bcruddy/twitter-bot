@@ -2,7 +2,7 @@
 
 'use strict';
 
-var Utils = require(__dirname + '/resources/utils.js');
+var Utils = require(__dirname + '/resources/utils');
 
 // var config = {
 //   keenan: 'tw.keenan.json',
@@ -19,42 +19,21 @@ var botName = process.argv.splice(2)[0];
 var async = require('async'),
   request = require('request'),
   TwitterBot = require(__dirname + '/resources/twitterbot.js').TwitterBot,
-  Bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json');
+  Bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
+  Favorite = require(__dirname + '/resources/favorite');
+
 
 var TwitterLocations = {
   Raleigh: 2478307
 };
 
 Bot.addAction('favorite', function () {
+
+  var favorite = new Favorite(Bot);
   async.waterfall([
-    (callback) => {
-      let opt = { id: TwitterLocations.Raleigh };
-      Bot.get('trends/place', opt, (err, data) => {
-        if (err)
-          return callback(err);
-
-        let d = data.sample();
-        callback(null, d.trends.sample());
-      });
-    },
-    (trend, callback) => {
-      let opt = { q: trend.query, count: 25 };
-      Bot.get('search/tweets', opt, (err, data) => {
-        if (err)
-          return callback(err);
-
-        callback(null, data.statuses.sample());
-      });
-    },
-    (selected, callback) => {
-      let opt = { id: selected.id_str };
-      Bot.post('favorites/create', opt, (err, data) => {
-        if (err)
-          return callback(err);
-
-        callback(null, data.user);
-      });
-    }
+    favorite.getTrendsByPlace,
+    favorite.findTweetsByTrend,
+    favorite.favoriteTweet
   ], (err, data) => {
     if (err) {
       return Utils.log('Favorite', { name: 'ERROR', content: err }, botName);
@@ -158,15 +137,15 @@ process.stdin.on('data', (chunk) => {
 console.log('----------');
 Utils.log('START', { name: 'bot started', content: null }, botName);
 
-
-(function doAction(i) {
-  setTimeout(function () {
-    let action = Bot.randomWeightedAction('prod');
-    Bot.now(action);
-
-    if (i < 3)
-      doAction(++i);
-    else
-      process.exit();
-  }, 2500);
-})(0);
+Bot.now('favorite');
+  // (function doAction(i) {
+  //   setTimeout(function () {
+  //     let action = Bot.randomWeightedAction('prod');
+  //     Bot.now(action);
+  //
+  //     if (i < 3)
+  //       doAction(++i);
+  //     else
+  //       process.exit();
+  //   }, 2500);
+  // })(0);
