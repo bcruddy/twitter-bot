@@ -1,8 +1,6 @@
 
 'use strict';
 
-var _ = require('lodash');
-
 class Unfollow {
 
   constructor(bot) {

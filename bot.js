@@ -17,7 +17,6 @@ var botName = process.argv.splice(2)[0];
 // }
 
 var async = require('async'),
-  request = require('request'),
   TwitterBot = require(__dirname + '/resources/twitterbot.js').TwitterBot,
   bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
   Favorite = require(__dirname + '/resources/favorite'),
