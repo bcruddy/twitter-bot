@@ -1,6 +1,8 @@
 
 'use strict';
 
+var Utils = require('./utils');
+
 class Unfollow {
 
   constructor(bot, config) {
@@ -16,9 +18,11 @@ class Unfollow {
    * @param callback {Function}
    */
   getMyFriendsList (callback) {
-    this.bot.get('friends/list', {}, (err, data) => {
+    this.bot.get('friends/list', { count: 200 }, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Unfollow', res);
 
       let friendIdList = data.users
                           .filter(u => !u.verified)
@@ -38,9 +42,11 @@ class Unfollow {
    */
   selectNonfollowerFromList (friendIdList, callback) {
     let opt = { user_id: friendIdList };
-    this.bot.get('friendships/lookup', opt, (err, data) => {
+    this.bot.get('friendships/lookup', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Unfollow', res);
 
       let nonfollowers = data.filter(user => !user.connections.contains('followed_by'));
 
@@ -51,9 +57,11 @@ class Unfollow {
 
   unfollowUser (user, callback) {
     let opt = { screen_name: user.screen_name };
-    this.bot.post('friendships/destroy', opt, (err, data) => {
+    this.bot.post('friendships/destroy', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Unfollow', res);
 
       let result = { name: '@' + data.screen_name, content: data.id.toString() };
 

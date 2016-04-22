@@ -73,5 +73,5 @@ bot.addAction('unfollow', function () {
       doAction(++i);
     else
       process.exit();
-  }, 2500);
+  }, 10000); // we need to make sure we get a rate limit response before initiating a new action
 })(0);

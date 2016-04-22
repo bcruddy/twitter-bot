@@ -1,6 +1,8 @@
 
 'use strict';
 
+var Utils = require('./utils');
+
 class Favorite {
 
   constructor(bot) {
@@ -12,9 +14,11 @@ class Favorite {
 
   getTrendsByPlace (callback) {
     var opt = { id: this.locations.Raleigh };
-    this.bot.get('trends/place', opt, (err, data) => {
+    this.bot.get('trends/place', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Favorite', res);
 
       let d = data.sample();
       callback(null, d.trends.sample());
@@ -23,9 +27,11 @@ class Favorite {
 
   findTweetsByTrend (trend, callback) {
     let opt = { q: trend.query, count: 25 };
-    this.bot.get('search/tweets', opt, (err, data) => {
+    this.bot.get('search/tweets', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Favorite', res);
 
       callback(null, data.statuses.sample());
     });
@@ -33,9 +39,11 @@ class Favorite {
 
   favoriteTweet (tweet, callback)  {
     let opt = { id: tweet.id_str };
-    this.bot.post('favorites/create', opt, (err, data) => {
+    this.bot.post('favorites/create', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Favorite', res);
 
       callback(null, data.user);
     });

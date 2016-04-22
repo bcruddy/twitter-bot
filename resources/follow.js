@@ -1,6 +1,8 @@
 
 'use strict';
 
+var Utils = require('./utils');
+
 class Follow {
   constructor(bot, config) {
     this.bot = bot;
@@ -10,9 +12,11 @@ class Follow {
   selectFollowerByHandle (callback) {
     let opt = { screen_name: this.config.handle };
     
-    this.bot.get('followers/ids', opt, (err, data) => {
+    this.bot.get('followers/ids', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Follow', res);
 
       callback(null, data.ids.sample());
     });
@@ -20,9 +24,11 @@ class Follow {
 
   getUserIdToFollow (id, callback) {
     let opt = { user_id: id };
-    this.bot.get('followers/ids', opt, (err, data) => {
+    this.bot.get('followers/ids', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Follow', res);
 
       callback(null, data.ids.sample());
     });
@@ -30,9 +36,11 @@ class Follow {
 
   followUserById (id, callback) {
     let opt = { user_id: id, follow: true };
-    this.bot.post('friendships/create', opt, (err, data) => {
+    this.bot.post('friendships/create', opt, (err, data, res) => {
       if (err)
         return callback(err);
+
+      Utils.checkRateLimit('Follow', res);
 
       callback(null, data);
     });
