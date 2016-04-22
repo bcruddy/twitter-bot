@@ -2,27 +2,17 @@
 
 'use strict';
 
-var Utils = require(__dirname + '/resources/utils');
-
-// var config = {
-//   keenan: 'tw.keenan.json',
-//   photofy: 'tw.photofy.json',
-//   badatmyjob: 'tw.badatmyjob.json'
-// };
-//
 var botName = process.argv.splice(2)[0];
-// if (!config.hasOwnProperty(botName)) {
-//   Utils.log('ERROR', { name: 'Not found', content: 'config for ' + botName + ' was not found' }, botName);
-//   process.exit();
-// }
 
-var async = require('async'),
+var fs = require('fs'),
+  async = require('async'),
+  Utils = require(__dirname + '/resources/utils'),
+  config = JSON.parse(fs.readFileSync(__dirname + '/config/tw.' + botName + '.json')),
   TwitterBot = require(__dirname + '/resources/twitterbot.js').TwitterBot,
   bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
   Favorite = require(__dirname + '/resources/favorite'),
   Follow = require(__dirname + '/resources/follow'),
   Unfollow = require(__dirname + '/resources/unfollow');
-
 
 bot.addAction('favorite', function () {
   var favorite = new Favorite(bot);
@@ -39,11 +29,10 @@ bot.addAction('favorite', function () {
     Utils.log('Favorite', { name: '@' + data.screen_name, content: data.id }, botName);
   });
 
-}).group('prod').weight(1);
-
+}).group('prod').weight(config.action_weights.favorite);
 
 bot.addAction('follow', function () {
-  var follow = new Follow(bot, botName);
+  var follow = new Follow(bot, config);
 
   async.waterfall([
     follow.selectFollowerByHandle.bind(follow),
@@ -57,11 +46,10 @@ bot.addAction('follow', function () {
     Utils.log('Follow', { name: '@' + data.screen_name, content: data.id }, botName);
   });
 
-}).group('prod').weight(2);
-
+}).group('prod').weight(config.action_weights.follow);
 
 bot.addAction('unfollow', function () {
-  var unfollow = new Unfollow(bot);
+  var unfollow = new Unfollow(bot, config);
 
   async.waterfall([
     unfollow.getMyFriendsList.bind(unfollow),
@@ -74,14 +62,14 @@ bot.addAction('unfollow', function () {
     Utils.log('Unfollow', data, botName);
   });
 
-}).group('prod').weight(1);
+}).group('prod').weight(config.action_weights.unfollow);
 
 (function doAction(i) {
   setTimeout(function () {
-    let action = bot.randomWeightedAction('prod');
+    let action = bot.randomWeightedAction(config.action_group);
     bot.now(action);
 
-    if (i < 3)
+    if (i < config.actions_per_run)
       doAction(++i);
     else
       process.exit();

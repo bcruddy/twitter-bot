@@ -3,8 +3,9 @@
 
 class Unfollow {
 
-  constructor(bot) {
+  constructor(bot, config) {
     this.bot = bot;
+    this.config = config;
   }
 
   /**
@@ -19,7 +20,7 @@ class Unfollow {
       if (err)
         return callback(err);
 
-      let friendIdList = data.users.filter(u => !u.verified || u.followers_count < 3000).map(u => u.id).reverse().join(', ');
+      let friendIdList = data.users.filter(u => !u.verified || u.followers_count < config.min_follower_count).map(u => u.id).reverse().join(', ');
       callback(null, friendIdList);
     });
   }

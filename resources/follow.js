@@ -2,28 +2,14 @@
 'use strict';
 
 class Follow {
-  constructor(bot, botName) {
+  constructor(bot, config) {
     this.bot = bot;
-    this.botName = botName;
-  }
-
-  getHandleFromBotName () {
-    var handles = {
-      photofy: 'photofyapp',
-      keenan: 'ckeenan05',
-      badatmyjob: 'badatmyjob'
-    };
-
-    if (handles.hasOwnProperty(this.botName)) {
-      return handles[this.botName];
-    } else {
-      return 'barstoolsports'; // TODO: use a better default than this
-    }
+    this.config = config;
   }
 
   selectFollowerByHandle (callback) {
-    let handle = this.getHandleFromBotName();
-    let opt = { screen_name: handle };
+    let opt = { screen_name: this.config.handle };
+    
     this.bot.get('followers/ids', opt, (err, data) => {
       if (err)
         return callback(err);
