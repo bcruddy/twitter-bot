@@ -1,7 +1,5 @@
 'use strict';
 
-var cp = require('child_process');
-
 Array.prototype.sample = function () {
   return this[Math.floor(Math.random() * this.length)];
 };
@@ -38,13 +36,10 @@ class Utils {
     return ['jpg', 'jpeg', 'png', 'gif'];
   }
 
-  static log(action, info, output) {
+  static log(action, info) {
     if (info === void 0) info = {};
     if (!info.hasOwnProperty('name')) info.name = 'not provided';
     if (!info.hasOwnProperty('content')) info.content = 'not provided';
-
-    if (output === void 0)
-      output = 'unknown';
 
     var cmd = [
       '[Action:' + action + ']',
@@ -52,7 +47,6 @@ class Utils {
       '[Timestamp: ' + new Date() + ']'].join(' ');
 
     console.log(cmd);
-    cp.exec('echo "'+ cmd +'" >> $PWD/logs/' + output + '.log.txt');
   }
 
   static isImage(url) {
