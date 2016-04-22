@@ -2,6 +2,16 @@
 
 Configure any number of twitter bots
 
+## What's it do?
+
+Currently contains three actions:
+
+* Follow: Follow one of your follower's followers
+* Unfollow: Unfollow someone who doesn't follow you
+* Favorite: Favorite a tweet trending in Raleigh, NC (location can be changed in `resources/favorite.js` constructor
+
+In the config file you can assign weights to each of these actions.
+
 ## Set up
 
 Requires Node v4+
