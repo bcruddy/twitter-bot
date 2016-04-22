@@ -3,6 +3,9 @@
 Configure any number of twitter bots
 
 ## Set up
+
+Requires Node v4+
+
 Clone the repository and run `npm install`
 
 ## Config
