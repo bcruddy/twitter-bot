@@ -1,25 +1,17 @@
 
 'use strict';
 
-// var TwitterLocations = {
-//   Raleigh: 2478307
-// };
-
 class Favorite {
 
   constructor(bot) {
     this.bot = bot;
-  }
-
-  get locations() {
-    return {
+    this.locations = {
       Raleigh: 2478307
     };
   }
 
   getTrendsByPlace (callback) {
-    console.log(this);
-    let opt = { id: this.locations.Raleigh };
+    var opt = { id: this.locations.Raleigh };
     this.bot.get('trends/place', opt, (err, data) => {
       if (err)
         return callback(err);
