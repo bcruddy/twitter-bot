@@ -42,9 +42,9 @@ class Utils {
     if (!info.hasOwnProperty('content')) info.content = 'not provided';
 
     var cmd = [
-      '[Action:' + action + ']',
-      '<' + info.name, info.content + '>',
-      '[Timestamp: ' + new Date() + ']'].join(' ');
+      '[' + new Date() + ']',
+      '[Action: ' + action + ']',
+      info.name, '<' + info.content + '>'].join(' ');
 
     console.log(cmd);
   }
