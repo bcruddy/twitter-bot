@@ -16,11 +16,11 @@ class Unfollow {
    * @param callback {Function}
    */
   getMyFriendsList (callback) {
-    this.bot.get('friends/list', {}, function (err, data) {
+    this.bot.get('friends/list', {}, (err, data) => {
       if (err)
         return callback(err);
 
-      let friendIdList = data.users.filter(u => !u.verified || u.followers_count < config.min_follower_count).map(u => u.id).reverse().join(', ');
+      let friendIdList = data.users.filter(u => !u.verified || u.followers_count < this.config.min_follower_count).map(u => u.id).reverse().join(', ');
       callback(null, friendIdList);
     });
   }
@@ -34,7 +34,7 @@ class Unfollow {
    */
   selectNonfollowerFromList (friendIdList, callback) {
     let opt = { user_id: friendIdList };
-    this.bot.get('friendships/lookup', opt, function (err, data, res) {
+    this.bot.get('friendships/lookup', opt, (err, data) => {
       if (err)
         return callback(err);
 
@@ -53,7 +53,7 @@ class Unfollow {
    */
   unfollowUser (user, callback) {
     let opt = { screen_name: user.screen_name };
-    this.bot.post('friendships/destroy', opt, function (err, data) {
+    this.bot.post('friendships/destroy', opt, (err, data) => {
       if (err)
         return callback(err);
 
