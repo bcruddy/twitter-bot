@@ -39,11 +39,9 @@ class Favorite {
 
   favoriteTweet (tweet, callback)  {
     let opt = { id: tweet.id_str };
-    this.bot.post('favorites/create', opt, (err, data, res) => {
+    this.bot.post('favorites/create', opt, (err, data) => {
       if (err)
         return callback(err);
-
-      Utils.checkRateLimit('Favorite', res);
 
       callback(null, data.user);
     });

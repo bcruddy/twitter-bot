@@ -36,11 +36,9 @@ class Follow {
 
   followUserById (id, callback) {
     let opt = { user_id: id, follow: true };
-    this.bot.post('friendships/create', opt, (err, data, res) => {
+    this.bot.post('friendships/create', opt, (err, data) => {
       if (err)
         return callback(err);
-
-      Utils.checkRateLimit('Follow', res);
 
       callback(null, data);
     });

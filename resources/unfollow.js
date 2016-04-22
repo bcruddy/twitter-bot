@@ -57,11 +57,9 @@ class Unfollow {
 
   unfollowUser (user, callback) {
     let opt = { screen_name: user.screen_name };
-    this.bot.post('friendships/destroy', opt, (err, data, res) => {
+    this.bot.post('friendships/destroy', opt, (err, data) => {
       if (err)
         return callback(err);
-
-      Utils.checkRateLimit('Unfollow', res);
 
       let result = { name: '@' + data.screen_name, content: data.id.toString() };
 
