@@ -5,6 +5,4 @@ node_modules
 .DS_Store
 
 /config/tw.*
-/config/fb.*
-/config/ig.*
 /logs
