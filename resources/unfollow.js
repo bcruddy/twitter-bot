@@ -20,7 +20,12 @@ class Unfollow {
       if (err)
         return callback(err);
 
-      let friendIdList = data.users.filter(u => !u.verified && u.followers_count < this.config.min_follower_count && !this.config.whitelist.contains(u.screen_name)).map(u => u.id).reverse().join(', ');
+      let friendIdList = data.users
+                          .filter(u => !u.verified)
+                          .filter(u => u.followers_count < this.config.min_follower_count)
+                          .filter(u => !this.config.whitelist.contains(u.screen_name))
+                          .map(u => u.id).join(', ');
+
       callback(null, friendIdList);
     });
   }
