@@ -1,0 +1,15 @@
+{
+  "consumer_secret": "[your consumer secret]",
+  "consumer_key": "[your consumer key]",
+  "access_token": "[your access token]",
+  "access_token_secret": "[your token secret]",
+  "handle": "[your handle with out '@']",
+  "action_group": "prod",
+  "actions_per_run": 3,
+  "action_weights": {
+    "follow": 2,
+    "unfollow": 1,
+    "favorite": 1
+  },
+  "min_follower_count": 3000
+}
