@@ -19,7 +19,7 @@ class Utils {
    */
   static checkRateLimit (action, serverResponse) {
     if (serverResponse.headers.hasOwnProperty('x-rate-limit-remaining')) {
-      var apiCallsRemaining = 0;
+      let apiCallsRemaining = 0;
       try {
         apiCallsRemaining = parseInt(serverResponse.headers['x-rate-limit-remaining']);
       }
@@ -41,7 +41,7 @@ class Utils {
     if (!info.hasOwnProperty('name')) info.name = 'not provided';
     if (!info.hasOwnProperty('content')) info.content = 'not provided';
 
-    var cmd = [
+    let cmd = [
       '[' + new Date() + ']',
       '[Action: ' + action + ']',
       info.name, '<' + info.content + '>'].join(' ');
