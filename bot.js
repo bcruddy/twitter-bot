@@ -44,8 +44,8 @@ bot.addAction('favorite', function () {
 
 
 bot.addAction('follow', function () {
-
   var follow = new Follow(bot, botName);
+
   async.waterfall([
     follow.selectFollowerByHandle.bind(follow),
     follow.getUserIdToFollow.bind(follow),
@@ -62,8 +62,8 @@ bot.addAction('follow', function () {
 
 
 bot.addAction('unfollow', function () {
-
   var unfollow = new Unfollow(bot);
+
   async.waterfall([
     unfollow.getMyFriendsList.bind(unfollow),
     unfollow.selectNonfollowerFromList.bind(unfollow),
@@ -76,8 +76,6 @@ bot.addAction('unfollow', function () {
   });
 
 }).group('prod').weight(1);
-
-console.log('Bot started');
 
 (function doAction(i) {
   setTimeout(function () {
