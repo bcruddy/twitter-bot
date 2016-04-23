@@ -5,7 +5,7 @@
   const _ = require('lodash');
   const Utils = require('./utils');
 
-  
+
   class Favorite {
 
     constructor(bot, config) {
@@ -39,8 +39,13 @@
 
         Utils.checkRateLimit('Favorite', res);
 
+        let tweets = _.chain(data.statuses)
+          .reject(t => t.possibly_sensitive)
+          .filter(t => t.retweet_count > this.config.retweet_floor || t.favorite_count > this.config.favorite_floor)
+          .value();
+
         if (_.has(data, 'statuses'))
-          callback(null, _.sample(data.statuses));
+          callback(null, _.sample(tweets));
         else
           callback('Favorite.findTweetsByTrend: bad status data');
       });
