@@ -27,7 +27,7 @@ class Reddit {
     }
 
     getPosts (callback) {
-        if (!Utils.isFn(callback)) {
+        if (!_.isFunction(callback)) {
             callback = function (data) {
                 Utils.log('Get content', { name: 'reddit.getPosts', content: data });
             };

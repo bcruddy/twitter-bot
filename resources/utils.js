@@ -1,63 +1,51 @@
-'use strict';
+(function () {
 
-Array.prototype.sample = function () {
-  return this[Math.floor(Math.random() * this.length)];
-};
+  'use strict';
 
-Array.prototype.contains = function (item) {
-  return this.indexOf(item) > -1;
-};
+  const _ = require('lodash');
 
-class Utils {
+  class Utils {
 
-  constructor() {}
+    constructor() {}
 
-  /**
-   * Kill process if we're going to exceed Twitter's rate limit
-   * @param action {string}
-   * @param serverResponse {object}
-   */
-  static checkRateLimit (action, serverResponse) {
-    if (serverResponse.headers.hasOwnProperty('x-rate-limit-remaining')) {
-      let apiCallsRemaining = 0;
-      try {
-        apiCallsRemaining = parseInt(serverResponse.headers['x-rate-limit-remaining']);
+    /**
+     * Kill process if we're going to exceed Twitter's rate limit
+     * @param action {string}
+     * @param serverResponse {object}
+     */
+    static checkRateLimit(action, serverResponse) {
+      if (_.has(serverResponse.headers, 'x-rate-limit-remaining')) {
+        let apiCallsRemaining = _.attempt(JSON.parse.bind(null, serverResponse.headers['x-rate-limit-remaining']));
+
+        if (typeof apiCallsRemaining === 'number' && apiCallsRemaining < 2) {
+          Utils.log(action, { name: 'ERROR', content: 'Rate limit reached' });
+          process.exit(1);
+        }
       }
-      catch (ex) {}
+    }
 
-      if (apiCallsRemaining < 2) {
-        Utils.log(action, { name: 'ERROR', content: 'Rate limit reached' });
-        process.exit();
-      }
+    static get imageExts() {
+      return ['jpg', 'jpeg', 'png', 'gif'];
+    }
+
+    static log(action, info) {
+      info = _.assign({}, { name: 'not provided', content: 'not provided' }, info);
+
+      let cmd = [
+        '[' + new Date() + ']',
+        '[Action: ' + action + ']',
+        info.name, '<' + info.content + '>'].join(' ');
+
+      console.log(cmd);
+    }
+
+    static isImage(url) {
+      let ext = url.split('.').pop();
+
+      return this.imageExts.indexOf(ext) > -1;
     }
   }
 
-  static get imageExts() {
-    return ['jpg', 'jpeg', 'png', 'gif'];
-  }
+  module.exports = Utils;
 
-  static log(action, info) {
-    if (info === void 0) info = {};
-    if (!info.hasOwnProperty('name')) info.name = 'not provided';
-    if (!info.hasOwnProperty('content')) info.content = 'not provided';
-
-    let cmd = [
-      '[' + new Date() + ']',
-      '[Action: ' + action + ']',
-      info.name, '<' + info.content + '>'].join(' ');
-
-    console.log(cmd);
-  }
-
-  static isImage(url) {
-    let ext = url.split('.').pop();
-
-    return this.imageExts.indexOf(ext) > -1;
-  }
-
-  static isFn(fn) {
-    return fn && typeof fn === 'function';
-  }
-}
-
-module.exports = Utils;
+}).call(this);
