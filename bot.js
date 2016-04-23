@@ -42,9 +42,9 @@
       follow.followUserById.bind(follow)
     ], (err, data) => {
       if (err)
-        Utils.log('Follow', { name: 'ERROR', content: err }, botName);
+        Utils.log('Follow  ', { name: 'ERROR', content: err }, botName);
       else
-        Utils.log('Follow', { name: '@' + data.screen_name, content: data.id }, botName);
+        Utils.log('Follow  ', { name: '@' + data.screen_name, content: data.id }, botName);
     });
   }).group('prod').weight(config.action_weights.follow);
 
