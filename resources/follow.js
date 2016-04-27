@@ -2,10 +2,11 @@
 
   'use strict';
 
-  const _ = require('lodash');
-  const Utils = require('./utils');
+  const _ = require('lodash'),
+    moment = require('moment'),
+    Utils = require('./utils');
 
-  
+
   class Follow {
 
     constructor(bot, config) {
@@ -21,7 +22,7 @@
           return callback(err);
 
         Utils.checkRateLimit('Follow', res);
-
+        // TODO: cache these ids so we dont need to make an api call every time
         if (_.has(data, 'ids'))
           callback(null, _.sample(data.ids));
         else
@@ -60,7 +61,6 @@
     }
 
   }
-
 
   module.exports = Follow;
 

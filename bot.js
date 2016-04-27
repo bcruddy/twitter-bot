@@ -14,6 +14,7 @@
     bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
     Favorite = require(__dirname + '/resources/favorite'),
     Follow = require(__dirname + '/resources/follow'),
+    ValidationHelper = require(__dirname + '/resources/validationHelper'),
     Unfollow = require(__dirname + '/resources/unfollow');
 
 
@@ -35,10 +36,12 @@
 
   bot.addAction('follow', function () {
     const follow = new Follow(bot, config);
+    const v = new ValidationHelper(bot, config);
 
     async.waterfall([
       follow.selectFollowerByHandle.bind(follow),
       follow.getUserIdToFollow.bind(follow),
+      v.shouldFollow.bind(v),
       follow.followUserById.bind(follow)
     ], (err, data) => {
       if (err)
