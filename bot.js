@@ -36,12 +36,12 @@
 
   bot.addAction('follow', function () {
     const follow = new Follow(bot, config);
-    const v = new ValidationHelper(bot, config);
+    const validate = new ValidationHelper(bot, config);
 
     async.waterfall([
       follow.selectFollowerByHandle.bind(follow),
       follow.getUserIdToFollow.bind(follow),
-      v.shouldFollow.bind(v),
+      validate.shouldFollow.bind(validate),
       follow.followUserById.bind(follow)
     ], (err, data) => {
       if (err)
