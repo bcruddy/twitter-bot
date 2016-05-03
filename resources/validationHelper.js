@@ -1,6 +1,3 @@
-/**
- * Created by bruddy on 4/27/16.
- */
 (function () {
 
   'use strict';
@@ -40,10 +37,10 @@
         return { valid: false, reason: 'Timeline contains tweets considered possibly sensitive' };
 
       let lastTweetCreated = moment(tweets[0].created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en');
-      let now = moment(new Date);
-      let isWithinTwoMonths = lastTweetCreated.diff(now, 'months') > -2;
+      let now = moment(new Date());
+      let isWithinLastMonth = lastTweetCreated.diff(now, 'months') > -2;
 
-      return { valid: isWithinTwoMonths, reason: isWithinTwoMonths ? null : 'Last tweet was over two months ago' };
+      return { valid: isWithinLastMonth, reason: isWithinLastMonth ? null : 'Last tweet was over a month ago' };
     }
 
   }
