@@ -2,8 +2,8 @@
 
   'use strict';
 
-  const _ = require('lodash');
-  const Utils = require('./utils');
+  const _ = require('lodash'),
+    Utils = require(__dirname + '/../resources/utils');
 
 
   class Favorite {
@@ -13,6 +13,10 @@
       this.config = config;
     }
 
+    /**
+     * Get trends by location set in config
+     * @param callback {Function}
+     */
     getTrendsByPlace(callback) {
       let opt = { id: this.config.location };
 
@@ -30,6 +34,11 @@
       });
     }
 
+    /**
+     * Get tweets from trend, logic to check whether or not we should favorite it
+     * @param trend {object}
+     * @param callback {Function}
+     */
     findTweetsByTrend(trend, callback) {
       let opt = { q: trend.query, count: 25 };
 
@@ -51,7 +60,15 @@
       });
     }
 
+    /**
+     * Favorite tweet
+     * @param tweet {object}
+     * @param callback {Function}
+     */
     favoriteTweet(tweet, callback) {
+      if (tweet === void 0)
+        return callback('favorite.favoriteTweet: tweet is undefined');
+      
       let opt = { id: tweet.id_str };
 
       this.bot.post('favorites/create', opt, (err, data) => {

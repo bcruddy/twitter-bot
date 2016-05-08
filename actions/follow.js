@@ -1,10 +1,9 @@
 (function () {
 
   'use strict';
-
   const _ = require('lodash'),
     moment = require('moment'),
-    Utils = require('./utils');
+    Utils = require(__dirname + '/../resources/utils');
 
 
   class Follow {
@@ -14,6 +13,10 @@
       this.config = config;
     }
 
+    /**
+     * Choose random follower from handle set in config
+     * @param callback {Function}
+     */
     selectFollowerByHandle(callback) {
       let opt = { screen_name: this.config.handle };
 
@@ -30,6 +33,11 @@
       });
     }
 
+    /**
+     * Choose a random follower from a given twitter account id
+     * @param id {Number} - twitter user id to select new follow from
+     * @param callback
+     */
     getUserIdToFollow(id, callback) {
       let opt = { user_id: id };
 
@@ -46,6 +54,11 @@
       });
     }
 
+    /**
+     * Follow user
+     * @param id {Number}
+     * @param callback {Function}
+     */
     followUserById(id, callback) {
       let opt = { user_id: id, follow: true };
 

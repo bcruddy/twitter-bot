@@ -8,14 +8,16 @@
   const fs = require('fs'),
     async = require('async'),
     _ = require('lodash');
+
   const Utils = require(__dirname + '/resources/utils'),
     config = JSON.parse(fs.readFileSync(__dirname + '/config/tw.' + botName + '.json')),
     TwitterBot = require(__dirname + '/resources/twitterbot.js').TwitterBot,
-    bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
-    Favorite = require(__dirname + '/resources/favorite'),
-    Follow = require(__dirname + '/resources/follow'),
-    ValidationHelper = require(__dirname + '/resources/validationHelper'),
-    Unfollow = require(__dirname + '/resources/unfollow');
+    bot = new TwitterBot(config),
+    // bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
+    Favorite = require(__dirname + '/actions/favorite'),
+    Follow = require(__dirname + '/actions/follow'),
+    Unfollow = require(__dirname + '/actions/unfollow'),
+    ValidationHelper = require(__dirname + '/resources/validationHelper');
 
 
   bot.addAction('favorite', function () {

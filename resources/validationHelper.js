@@ -31,10 +31,17 @@
 
     isValidAccount(tweets) {
       let totalCount = tweets.length;
-      let notSensitive = _.filter(tweets, t => !t.possibly_sensitive);
 
+      if (totalCount === 0)
+        return { valid: false, reason: 'Account has no tweets' };
+
+      let notSensitive = _.filter(tweets, t => !t.possibly_sensitive);
       if (totalCount > notSensitive)
         return { valid: false, reason: 'Timeline contains tweets considered possibly sensitive' };
+
+      let notEnglish = _.filter(tweets, t => t.lang === 'en');
+      if (totalCount > notEnglish)
+        return { valid: false, reason: 'Timeline contains non english tweets' };
 
       let lastTweetCreated = moment(tweets[0].created_at, 'dd MMM DD HH:mm:ss ZZ YYYY', 'en');
       let now = moment(new Date());

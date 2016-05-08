@@ -2,8 +2,8 @@
 
   'use strict';
 
-  const _ = require('lodash');
-  const Utils = require('./utils');
+  const _ = require('lodash'),
+    Utils = require(__dirname + '/../resources/utils');
 
   
   class Unfollow {
@@ -28,10 +28,10 @@
         Utils.checkRateLimit('Unfollow', res);
 
         let friendIdList = _.chain(data.users)
-          .reject(u => u.verified)
           .filter(u => u.followers_count < this.config.min_follower_count)
-          .reject(u => _.includes(this.config.whitelist, u.screen_name))
+          .reject(u => u.verified ||  _.includes(this.config.whitelist, u.screen_name))
           .map(u => u.id)
+          .slice(0, 90)
           .value();
 
         if (_.isArray(friendIdList))
@@ -55,10 +55,11 @@
           return callback(err);
 
         Utils.checkRateLimit('Unfollow', res);
-
         let nonfollowers = _.filter(data, u => !_.includes(u.connections, 'followed_by'));
-
-        if (_.isArray(nonfollowers))
+        
+        if (nonfollowers.length === 0)
+          callback('Unfollow.selectNonfollowerFromList: could not retrieve valid user to unfollow');
+        else if (_.isArray(nonfollowers))
           callback(null, _.sample(nonfollowers));
         else
           callback('Unfollow.selectNonfollowerFromList: nonfollowers is not an array');
@@ -66,6 +67,8 @@
     }
 
     unfollowUser(user, callback) {
+      if (user === void 0)
+          return callback('Unfollow.unfollowUser: user not defined');
       let opt = { screen_name: user.screen_name };
 
       this.bot.post('friendships/destroy', opt, (err, data) => {
