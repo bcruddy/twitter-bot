@@ -13,7 +13,6 @@
     config = JSON.parse(fs.readFileSync(__dirname + '/config/tw.' + botName + '.json')),
     TwitterBot = require(__dirname + '/resources/twitterbot.js').TwitterBot,
     bot = new TwitterBot(config),
-    // bot = new TwitterBot(__dirname + '/config/tw.' + botName + '.json'),
     Favorite = require(__dirname + '/actions/favorite'),
     Follow = require(__dirname + '/actions/follow'),
     Unfollow = require(__dirname + '/actions/unfollow'),

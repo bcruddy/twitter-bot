@@ -35,7 +35,7 @@
           .value();
 
         if (_.isArray(friendIdList))
-          callback(null, friendIdList.join(', '));
+          callback(null, friendIdList.join(','));
         else
           callback('Unfollow.getMyFriendsList: friendIdlist empty');
       });
