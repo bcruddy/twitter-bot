@@ -27,9 +27,14 @@
 
         Utils.checkRateLimit('Unfollow', res);
 
+        // let friendIdList = _.chain(data.users)
+        //   .filter(u => u.followers_count < this.config.min_follower_count)
+        //   .reject(u => u.verified ||  _.includes(this.config.whitelist, u.screen_name))
+        //   .map(u => u.id)
+        //   .slice(0, 90)
+        //   .value();
         let friendIdList = _.chain(data.users)
-          .filter(u => u.followers_count < this.config.min_follower_count)
-          .reject(u => u.verified ||  _.includes(this.config.whitelist, u.screen_name))
+          .reject(u => _.includes(this.config.whitelist, u.screen_name))
           .map(u => u.id)
           .slice(0, 90)
           .value();

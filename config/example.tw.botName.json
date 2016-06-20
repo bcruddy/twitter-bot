@@ -15,5 +15,5 @@
   "location": 2478307,
   "retweet_floor": 10,
   "favorite_floor": 10,
-  "whitelist": []
+  "whitelist": ["bcruddy", "photofy"]
 }

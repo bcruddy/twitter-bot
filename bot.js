@@ -68,12 +68,11 @@
     });
   }).group('prod').weight(config.action_weights.unfollow);
 
-
   _.times(config.actions_per_run, function () {
     setTimeout(() => {
       let action = bot.randomWeightedAction(config.action_group);
       bot.now(action);
     }, 3000);
   });
-
+  
 }).call(this);
